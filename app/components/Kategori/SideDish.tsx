@@ -10,7 +10,7 @@ const SideDish = () => {
   useEffect(() => {
     const fetchSideDishes = async () => {
       try {
-        const response = await fetch('/api/sideDish') // Memanggil API yang sudah dibuat
+        const response = await fetch('/api/sidedish') // Memanggil API yang sudah dibuat
         const data = await response.json()
 
         if (!response.ok) {
