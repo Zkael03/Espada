@@ -17,7 +17,7 @@ db.connect((err) => {
     console.error('Error connecting to database:', err.message);
     return;
   }
-  console.log('Connected to database');
+  console.log('Connected to database!');
 });
 
 export default db;
