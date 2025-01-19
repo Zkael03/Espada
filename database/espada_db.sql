@@ -14,12 +14,13 @@ CREATE TABLE users (
 CREATE TABLE items (
   id INT PRIMARY KEY,
   name VARCHAR(20) NOT NULL,
-  price DECIMAL(10.2) NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
   category VARCHAR(10) NOT NULL,
   image VARCHAR(50) NOT NULL,
-  best_seller VARCHAR(10) NOT NULL,
-  trending VARCHAR(10) NOT NULL
-)
+  best_seller ENUM('Yes', 'No') NOT NULL,
+  trending ENUM('Yes', 'No') NOT NULL
+);
+
 
 INSERT INTO items (id, name, price, category, image, best_seller, trending) VALUES
 (1, 'Grilled Steak', 180.00, 'Steak', '/images/grilled steak.png', 'Yes', 'No'),
