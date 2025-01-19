@@ -1,13 +1,15 @@
 CREATE DATABASE espada_db;
 USE espada_db;
 
-CREATE TABLE users  (
+CREATE TABLE users (
   id INT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   nomor_telepon VARCHAR(20),
+  created_at DATETIME,
   password VARCHAR(255) NOT NULL
 );
+
 
 CREATE TABLE items (
   id INT PRIMARY KEY,
