@@ -44,8 +44,25 @@ interface User {
     return `Rp ${roundedPrice.toLocaleString('id-ID')}`;
   };
   
-  
 
+  const handleDeleteItem = async (itemId: number) => {
+    try {
+      // Kirim request DELETE ke API
+      const response = await fetch(`/api/products/${itemId}`, {
+        method: 'DELETE',
+      });
+  
+      if (response.ok) {
+        // Jika berhasil, perbarui state untuk menghapus item dari tabel
+        setItemsData((prevItems) => prevItems.filter((item) => item.id !== itemId));
+      } else {
+        console.error('Failed to delete the item');
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+  
 
   // Fungsi untuk memformat tanggal menjadi dd-mm-yy
   const formatDate = (dateString: string) => {
@@ -161,28 +178,31 @@ interface User {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.price)}</td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              item.best_seller === 'yes' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                              item.best_seller === 'Yes' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                             }`}>
-                              {item.best_seller === 'yes' ? 'Yes' : 'No'}
+                              {item.best_seller === 'Yes' ? 'Yes' : 'No'}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              item.trending === 'yes' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+                              item.trending === 'Yes' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
                             }`}>
-                              {item.trending === 'yes' ? 'Yes' : 'No'}
+                              {item.trending === 'Yes' ? 'Yes' : 'No'}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div className="flex space-x-2">
-                              <button className="text-blue-600 hover:text-blue-900">
+                                <button className="text-blue-600 hover:text-blue-900">
                                 <Edit className="w-4 h-4" />
-                              </button>
-                              <button className="text-red-600 hover:text-red-900">
+                                </button>
+                                <button 
+                                className="text-red-600 hover:text-red-900" 
+                                onClick={() => handleDeleteItem(item.id)} // Menambahkan event handler delete
+                                >
                                 <Trash2 className="w-4 h-4" />
-                              </button>
+                                </button>
                             </div>
-                          </td>
+                            </td>
                         </tr>
                       ))}
                     </tbody>
