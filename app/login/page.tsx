@@ -24,6 +24,8 @@ const Login = () => {
     password: "",
   });
 
+  const [activeTab, setActiveTab] = useState<"admin" | "user">("user");
+
   const router = useRouter(); // Hook untuk pengalihan halaman
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,10 +69,9 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (validateForm()) {
       try {
-        // Ganti dengan API call login yang sebenarnya
         const response = await fetch("/api/users/login", {
           method: "POST",
           headers: {
@@ -78,15 +79,14 @@ const Login = () => {
           },
           body: JSON.stringify(formData),
         });
-
+  
         const result = await response.json();
-
+  
         if (response.ok) {
-          // Login berhasil
-          alert("Login successful!"); // Tampilkan alert
+          localStorage.setItem("user", JSON.stringify(result.user)); // Simpan data pengguna ke localStorage
+          alert("Login successful!");
           router.push("/"); // Arahkan ke halaman utama
         } else {
-          // Login gagal
           alert(result.message || "Login failed");
         }
       } catch (error) {
@@ -94,6 +94,10 @@ const Login = () => {
         alert("An error occurred during login.");
       }
     }
+  };
+
+  const handleBack = () => {
+    router.back(); // Kembali ke halaman sebelumnya
   };
 
   return (
@@ -110,6 +114,31 @@ const Login = () => {
             Login
           </h2>
 
+          {/* Tab Buttons */}
+          <div className="flex justify-center space-x-8 mb-6">
+            <button
+              onClick={() => setActiveTab("admin")}
+              className={`px-4 py-2 text-lg font-semibold ${
+                activeTab === "admin"
+                  ? "text-indigo-600 border-b-2 border-indigo-600"
+                  : "text-gray-500"
+              }`}
+            >
+              Admin
+            </button>
+            <button
+              onClick={() => setActiveTab("user")}
+              className={`px-4 py-2 text-lg font-semibold ${
+                activeTab === "user"
+                  ? "text-indigo-600 border-b-2 border-indigo-600"
+                  : "text-gray-500"
+              }`}
+            >
+              User
+            </button>
+          </div>
+
+          {/* Form */}
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm -space-y-px">
               <div className="mb-6">
@@ -165,6 +194,16 @@ const Login = () => {
               </button>
             </div>
           </form>
+
+          {/* Back Button */}
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={handleBack}
+              className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Kembali
+            </button>
+          </div>
         </div>
       </div>
     </div>
