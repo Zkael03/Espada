@@ -10,10 +10,16 @@ type Props = {
     image: string;
     name: string;
     price: string;
-}
+  };
+  onAddToCart: (item: {
+    id: number;
+    name: string;
+    price: string;
+    image: string; // Tambahkan jika Anda ingin menyertakan gambar dalam permintaan API
+  }) => void; // Fungsi untuk menangani tombol Add to Cart
 }
 
-const SideDishCard = ({data}:Props) => {
+const SideDishCard = ({data, onAddToCart}: Props) => {
   return (
     <Tilt>
         <div className="rounded-lg border-2 cursor-pointer border-gray-300 border-opacity-30 p-6">
@@ -29,7 +35,12 @@ const SideDishCard = ({data}:Props) => {
                 </div>
                 <div className="flex mt-3 items-center justify-between">
                     <div className="text-blue-950 text-base font-bold text-sm">
-                        Add to Cart
+                        <button
+                          className="bg-blue-500 text-white px-4 py-2 rounded"
+                          onClick={() => onAddToCart(data)} // Panggil fungsi dengan data side dish
+                        >
+                          Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>

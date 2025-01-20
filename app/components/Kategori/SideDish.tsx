@@ -26,6 +26,35 @@ const SideDish = () => {
     fetchSideDishes() // Menjalankan fungsi fetching data ketika komponen di-mount
   }, [])
 
+  // Fungsi untuk menambahkan item ke keranjang
+  const handleAddToCart = async (item: any) => {
+    try {
+      const response = await fetch("/api/users/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: 1,       // ID user
+          item_id: item.id, // ID item dari objek item
+          jumlah: 1,        // Jumlah item
+          name: item.name,  // Nama item
+          price: item.price, // Harga item
+          image: item.image // Gambar item
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Item added to cart:", data);
+      } else {
+        console.error("Failed to add item to cart:", data);
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
+  };
+
   if (error) {
     return <div className="text-center text-red-500">{error}</div> // Menampilkan error jika ada
   }
@@ -38,7 +67,7 @@ const SideDish = () => {
       <div className="w-4/5 mt-8 md:mt-16 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {sideDishes.map(data => (
           <div key={data.id}>
-            <SideDishCard data={data} /> {/* Menggunakan komponen untuk menampilkan data */}
+            <SideDishCard data={data} onAddToCart={handleAddToCart} /> {/* Menggunakan fungsi handleAddToCart */}
           </div>
         ))}
       </div>
