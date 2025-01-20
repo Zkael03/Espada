@@ -1,6 +1,7 @@
 "use client"; // Mengaktifkan client-side rendering
 
 import { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/navigation"; // untuk pengalihan halaman
 
 interface FormData {
   username: string;
@@ -23,6 +24,8 @@ const Login = () => {
     password: "",
   });
 
+  const router = useRouter(); // Hook untuk pengalihan halaman
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -43,12 +46,9 @@ const Login = () => {
       password: "",
     };
 
-    // Email validation
+    // Username validation
     if (!formData.username) {
-      newErrors.username = "Email is required";
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.username)) {
-      newErrors.username = "Please enter a valid email";
+      newErrors.username = "Username is required";
       isValid = false;
     }
 
@@ -65,12 +65,34 @@ const Login = () => {
     return isValid;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (validateForm()) {
-      // Simulate API call
-      console.log("Form submitted:", formData);
+      try {
+        // Ganti dengan API call login yang sebenarnya
+        const response = await fetch("/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // Login berhasil
+          alert("Login successful!"); // Tampilkan alert
+          router.push("/"); // Arahkan ke halaman utama
+        } else {
+          // Login gagal
+          alert(result.message || "Login failed");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("An error occurred during login.");
+      }
     }
   };
 
