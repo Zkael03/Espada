@@ -90,13 +90,43 @@ const SignUp = () => {
     return isValid;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (validateForm()) {
-      // Simulate API call
-      console.log("Form submitted:", formData);
-      // Add your signup logic here
+      try {
+        // Kirim data ke API endpoint
+        const response = await fetch('/api/users/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Signup failed');
+        }
+  
+        const data = await response.json();
+        console.log('Success:', data);
+        
+        // Reset form setelah berhasil
+        setFormData({
+          username: "",
+          email: "",
+          phone: "",
+          password: "",
+        });
+  
+        // Tambahkan notifikasi sukses di sini (optional)
+        alert('Registration successful!');
+        
+      } catch (error) {
+        console.error('Error:', error);
+        // Tambahkan handling error di sini (optional)
+        alert('Registration failed. Please try again.');
+      }
     }
   };
 
