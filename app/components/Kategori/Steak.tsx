@@ -28,29 +28,35 @@ const Steak = () => {
 
   // Fungsi untuk menambahkan item ke keranjang
  // Steak.tsx
- const handleAddToCart = async (item: { id: number; name: string; price: string; }) => {
+ const handleAddToCart = async (item: any) => {
   try {
-    const response = await fetch('/api/users/cart', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/users/cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        user_id: 1, // Ganti dengan user_id yang valid
-        item_id: item.id,
-        jumlah: 1, // Tambah jumlah sesuai kebutuhan
+        user_id: 1,       // ID user
+        item_id: item.id, // ID item dari objek item
+        jumlah: 1,        // Jumlah item
+        name: item.name,  // Nama item
+        price: item.price, // Harga item
+        image: item.image // Gambar item
       }),
     });
 
     const data = await response.json();
-
     if (response.ok) {
-      console.log('Item added to cart:', data.message);
+      console.log("Item added to cart:", data);
     } else {
-      console.error('Error adding item to cart:', data.message);
+      console.error("Failed to add item to cart:", data);
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error adding item to cart:", error);
   }
 };
+
+
 
 
   if (error) {

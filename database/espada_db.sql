@@ -25,7 +25,7 @@ CREATE TABLE items (
 INSERT INTO items (id, name, price, category, image, best_seller, trending) VALUES
 (1, 'Grilled Steak', 180.00, 'Steak', '/images/grilled steak.png', 'Yes', 'No'),
 (2, 'Ribeye Steak', 200.00, 'Steak', '/images/rib eye.png', 'No', 'No'),
-(3, 'T-Bone Steak', 220.00, 'Steak', '/images/t-bone steak.png', 'No', 'No'),
+(3, 'T-Bone Steak', 220.00, 'Steak', '/images/t-bone steak.jpeg', 'No', 'No'),
 (4, 'Filet Mignon', 350.00, 'Steak', '/images/fillet mignon.png', 'No', 'Yes'),
 (5, 'Beef Wellington', 450.00, 'Steak', '/images/beef wellington.png', 'Yes', 'No'),
 (6, 'Grilled Salmon', 180.00, 'Steak', '/images/grilled salmon.png', 'No', 'Yes'),
