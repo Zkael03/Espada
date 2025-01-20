@@ -1,23 +1,25 @@
-// /lib/db.ts
-
 import mysql from 'mysql2';
 
-// Koneksi ke database MySQL
-const db = mysql.createConnection({
+// Koneksi pool ke database MySQL
+const db = mysql.createPool({
   host: 'localhost',
-  user: 'root',  // Ganti dengan username Anda
-  password: 'azka',  // Ganti dengan password Anda
-  database: 'espada',  // Ganti dengan nama database Anda
-  port:3308,
+  user: 'root', // Ganti dengan username Anda
+  password: 'azka', // Ganti dengan password Anda
+  database: 'espada', // Ganti dengan nama database Anda
+  port: 3308,
+  waitForConnections: true,
+  connectionLimit: 10, // Maksimal koneksi dalam pool
+  queueLimit: 0, // Tanpa batas antrian
 });
 
-// Cek apakah berhasil terkoneksi
-db.connect((err) => {
+// Tes koneksi
+db.getConnection((err, connection) => {
   if (err) {
     console.error('Error connecting to database:', err.message);
     return;
   }
   console.log('Connected to database!');
+  connection.release(); // Kembalikan koneksi ke pool
 });
 
 export default db;
