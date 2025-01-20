@@ -1,6 +1,7 @@
 "use client"; // Mengaktifkan client-side rendering
 
 import { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 interface FormData {
   username: string;
@@ -30,6 +31,8 @@ const SignUp = () => {
     phone: "",
     password: "",
   });
+
+  const router = useRouter(); // Inisialisasi useRouter
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -92,7 +95,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (validateForm()) {
       try {
         // Kirim data ke API endpoint
@@ -103,14 +106,14 @@ const SignUp = () => {
           },
           body: JSON.stringify(formData),
         });
-  
+
         if (!response.ok) {
           throw new Error('Signup failed');
         }
-  
+
         const data = await response.json();
         console.log('Success:', data);
-        
+
         // Reset form setelah berhasil
         setFormData({
           username: "",
@@ -118,10 +121,13 @@ const SignUp = () => {
           phone: "",
           password: "",
         });
-  
+
         // Tambahkan notifikasi sukses di sini (optional)
         alert('Registration successful!');
-        
+
+        // Redirect ke halaman login setelah sukses
+        router.push('/login'); // Arahkan ke halaman login
+
       } catch (error) {
         console.error('Error:', error);
         // Tambahkan handling error di sini (optional)
