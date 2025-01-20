@@ -16,6 +16,7 @@ function Nav({ navHandler }: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const walletDrawerRef = useRef<HTMLDivElement>(null);
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Fetch cart data
   const fetchCart = async () => {
@@ -38,6 +39,9 @@ function Nav({ navHandler }: Props) {
 
   // Close dropdown and wallet drawer when clicking outside
   useEffect(() => {
+    const user = localStorage.getItem("user");
+    setIsLoggedIn(!!user);
+    
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -58,6 +62,15 @@ function Nav({ navHandler }: Props) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // Remove user from localStorage
+    setIsLoggedIn(false); // Set login status to false
+    setShowDropdown(false); // Close dropdown
+    // Redirect to login page
+    window.location.href = "/";
+  };
 
   return (
     <>
@@ -88,10 +101,12 @@ function Nav({ navHandler }: Props) {
 
           {/* Icons */}
           <div className="flex items-center space-x-8">
-            <BiWallet
-              onClick={() => setShowWalletDrawer(!showWalletDrawer)}
-              className={`w-6 h-6 cursor-pointer ${showWalletDrawer ? "text-red-600" : ""}`}
-            />
+            {isLoggedIn && (
+              <BiWallet
+                onClick={() => setShowWalletDrawer(!showWalletDrawer)}
+                className={`w-6 h-6 cursor-pointer ${showWalletDrawer ? "text-red-600" : ""}`}
+              />
+            )}
             <div className="relative" ref={dropdownRef}>
               <BiUser
                 className="w-6 h-6 cursor-pointer"
@@ -99,16 +114,27 @@ function Nav({ navHandler }: Props) {
               />
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                  <Link href="/login">
-                    <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      Login
+                  {!isLoggedIn ? (
+                    <>
+                      <Link href="/login">
+                        <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                          Login
+                        </div>
+                      </Link>
+                      <Link href="/signup">
+                        <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                          Sign Up
+                        </div>
+                      </Link>
+                    </>
+                  ) : (
+                    <div
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      onClick={handleLogout}
+                    >
+                      Logout
                     </div>
-                  </Link>
-                  <Link href="/signup">
-                    <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      Sign Up
-                    </div>
-                  </Link>
+                  )}
                 </div>
               )}
             </div>
